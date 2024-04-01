@@ -365,7 +365,7 @@ function sendRequest(endpoint, method, sendBody, delayAccepted) {
                             tooManyRequests = false;
                             sendRequest(endpoint, method, sendBody, delayAccepted)})
                         .catch(error => {
-                            adapter.log.info(error);
+                            adapter.log.debug(error);
                         });
                     break;
 
@@ -661,7 +661,7 @@ function createPlaybackInfo(data) {
                             }
                         })
                         .catch(error => {
-                            adapter.log.info(error);
+                            adapter.log.debug(error);
                         });;
                 }
             };
@@ -780,7 +780,7 @@ function createPlaybackInfo(data) {
                                 'GET', '')
                                 .then(refreshPlaylist)
                                 .catch(error => {
-                                    adapter.log.info(error);
+                                    adapter.log.debug(error);
                                 });
                         }
                     });
@@ -1626,7 +1626,7 @@ function pollStatusApi(noReschedule) {
                         );
                     }
                     application.error202shown = true;
-                }else if (err === 429){
+                } else if (err === 429){
                     adapter.log.debug("We are currently being rate limited, waiting for next update ...")
                 } else {
                     adapter.log.warn('unexpected api response http ' + err + '; continue polling');
@@ -2059,7 +2059,7 @@ function listenOnGetDevices() {
     return sendRequest('/v1/me/player/devices', 'GET', '')
         .then(data => reloadDevices(data))
         .catch(error => {
-            adapter.log.info(error);
+            adapter.log.debug(error);
         });
 }
 
