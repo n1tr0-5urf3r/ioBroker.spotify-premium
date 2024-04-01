@@ -779,11 +779,9 @@ function createPlaybackInfo(data) {
                         if (playlistCache.hasOwnProperty(userId + '-' + playlistId)) {
                             return refreshPlaylist(playlistCache[userId + '-' + playlistId]);
                         } else {
-                            // TODO
                             return sendRequest(`/v1/users/${userId}/playlists/${playlistId}?${querystring.stringify(query)}`,
                                 'GET', '')
                                 .then(refreshPlaylist)
-                                .then(adapter.log.info("In createPlaybackInfo"))
                                 .catch(error => {
                                     adapter.log.debug(error);
                                 });
@@ -1028,10 +1026,8 @@ function getUsersPlaylist(offset, addedList) {
             limit: 30,
             offset: offset
         };
-        // TODO
         return sendRequest(`/v1/users/${application.userId}/playlists?${querystring.stringify(query)}`, 'GET', '')
             .then(parsedJson => createPlaylists(parsedJson, true, addedList))
-            .then(adapter.log.info("In getUsersPlaylist"))
             .catch(err => adapter.log.error('playlist error ' + err));
     } else {
         adapter.log.warn('no userId');
@@ -1073,11 +1069,11 @@ async function getPlaylistTracks(owner, id) {
     /* eslint-disable-next-line */
     while (true) {
         const query = {
-            limit: 50,
+            limit: 500,
             offset: offset
         };
         try {
-            // TODO
+            // TODO too many API calls here!
             const data = await sendRequest(`/v1/users/${regParam}?${querystring.stringify(query)}`, 'GET', '');
             adapter.log.info("In getPlaylistTracks");
             let i = offset;
@@ -1130,8 +1126,8 @@ async function getPlaylistTracks(owner, id) {
                 playlistObject.songs.push(a);
                 i++;
             });
-            if (offset + 50 < data.total) {
-                offset += 50;
+            if (offset + 500 < data.total) {
+                offset += 500;
             } else {
                 break;
             }
