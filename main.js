@@ -779,9 +779,11 @@ function createPlaybackInfo(data) {
                         if (playlistCache.hasOwnProperty(userId + '-' + playlistId)) {
                             return refreshPlaylist(playlistCache[userId + '-' + playlistId]);
                         } else {
+                            // TODO
                             return sendRequest(`/v1/users/${userId}/playlists/${playlistId}?${querystring.stringify(query)}`,
                                 'GET', '')
                                 .then(refreshPlaylist)
+                                .then(adapter.log.info("In createPlaybackInfo"))
                                 .catch(error => {
                                     adapter.log.debug(error);
                                 });
@@ -1026,8 +1028,10 @@ function getUsersPlaylist(offset, addedList) {
             limit: 30,
             offset: offset
         };
+        // TODO
         return sendRequest(`/v1/users/${application.userId}/playlists?${querystring.stringify(query)}`, 'GET', '')
             .then(parsedJson => createPlaylists(parsedJson, true, addedList))
+            .then(adapter.log.info("In getUsersPlaylist"))
             .catch(err => adapter.log.error('playlist error ' + err));
     } else {
         adapter.log.warn('no userId');
@@ -1073,7 +1077,9 @@ async function getPlaylistTracks(owner, id) {
             offset: offset
         };
         try {
+            // TODO
             const data = await sendRequest(`/v1/users/${regParam}?${querystring.stringify(query)}`, 'GET', '');
+            adapter.log.info("In getPlaylistTracks");
             let i = offset;
             const no = i.toString();
             data.items.forEach(item => {
