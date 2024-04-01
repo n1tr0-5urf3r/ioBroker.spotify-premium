@@ -1671,6 +1671,7 @@ function pollDeviceApi() {
 
 function schedulePlaylistPolling() {
     clearTimeout(application.playlistPollingHandle);
+    adapter.log.info("Playlist Delay: "+ playlistPollingDelaySeconds);
     if (application.playlistPollingDelaySeconds > 0) {
         application.playlistPollingHandle = setTimeout(() => !stopped && pollPlaylistApi(), application.playlistPollingDelaySeconds *
             1000);
