@@ -353,6 +353,7 @@ function sendRequest(endpoint, method, sendBody, delayAccepted) {
                     // Too Many Requests
                     /* eslint-disable-next-line */ // TODO: Verify why eslint reports'Unexpected lexical declaration in case block'
                     let wait = 1;
+                    adapter.log.info(response.headers);
                     if (response.headers.hasOwnProperty('retry-after') && response.headers['retry-after'] >
                         0) {
                         wait = response.headers['retry-after'];
