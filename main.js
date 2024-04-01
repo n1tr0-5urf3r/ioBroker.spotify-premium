@@ -1074,16 +1074,8 @@ async function getPlaylistTracks(owner, id) {
         };
         try {
             // TODO too many API calls here!
-
-            new Promise(resolve => setTimeout(() => resolve(), wait * 1000))
-                .then(() => {
-                    sendRequest(`/v1/users/${regParam}?${querystring.stringify(query)}`, 'GET', '')
-                })
-                .catch(error => {
-                    adapter.log.debug(error);
-            });
-
-            //const data = await sendRequest(`/v1/users/${regParam}?${querystring.stringify(query)}`, 'GET', '');
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            const data = await sendRequest(`/v1/users/${regParam}?${querystring.stringify(query)}`, 'GET', '');
             adapter.log.info("In getPlaylistTracks");
             let i = offset;
             const no = i.toString();
