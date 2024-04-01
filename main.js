@@ -350,10 +350,10 @@ function sendRequest(endpoint, method, sendBody, delayAccepted) {
                     break;
 
                 case 429:
+                    adapter.log.info(JSON.stringify(response.headers));
                     // Too Many Requests
                     /* eslint-disable-next-line */ // TODO: Verify why eslint reports'Unexpected lexical declaration in case block'
                     let wait = 1;
-                    adapter.log.info(response.headers);
                     if (response.headers.hasOwnProperty('retry-after') && response.headers['retry-after'] >
                         0) {
                         wait = response.headers['retry-after'];
@@ -1626,6 +1626,8 @@ function pollStatusApi(noReschedule) {
                         );
                     }
                     application.error202shown = true;
+                }else if (err === 429){
+                    adapter.log.debug("We are currently being rate limited, waiting for next update ...")
                 } else {
                     adapter.log.warn('unexpected api response http ' + err + '; continue polling');
                 }
