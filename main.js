@@ -1075,7 +1075,7 @@ async function getPlaylistTracks(owner, id) {
         try {
             // TODO too many API calls here!
 
-            ret = new Promise(resolve => setTimeout(() => resolve(), wait * 1000))
+            new Promise(resolve => setTimeout(() => resolve(), wait * 1000))
                 .then(() => {
                     sendRequest(`/v1/users/${regParam}?${querystring.stringify(query)}`, 'GET', '')
                 })
