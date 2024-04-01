@@ -258,7 +258,7 @@ function sendRequest(endpoint, method, sendBody, delayAccepted) {
 
     if (tooManyRequests){
         // We are currently blocked because of too many requests. Do not send out a new request.
-        return Promise.reject(429);
+        return null;
     }
 
     return request(options)
