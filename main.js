@@ -52,6 +52,7 @@ const deviceData = {
     lastSelectDeviceId: ''
 };
 let stopped = false;
+let tooManyRequests = false;
 
 function startAdapter(options) {
     options = options || {};
@@ -252,6 +253,11 @@ function sendRequest(endpoint, method, sendBody, delayAccepted) {
     const callStack = new Error().stack;
     adapter.setState('authorization.error', '', true);
 
+    if (tooManyRequests){
+        // We are currently blocked because of too many requests. Do not send out a new request.
+        return Promise.reject(429);
+    }
+
     return request(options)
         .then(response => {
             const body = response.body;
@@ -347,10 +353,14 @@ function sendRequest(endpoint, method, sendBody, delayAccepted) {
                     if (response.headers.hasOwnProperty('retry-after') && response.headers['retry-after'] >
                         0) {
                         wait = response.headers['retry-after'];
+                        tooManyRequests = true;
                         adapter.log.warn('too many requests, wait ' + wait + 's');
                     }
                     ret = new Promise(resolve => setTimeout(() => !stopped && resolve(), wait * 1000))
-                        .then(() => sendRequest(endpoint, method, sendBody, delayAccepted));
+                        .then(() => {
+                            tooManyRequests = false;
+                            sendRequest(endpoint, method, sendBody, delayAccepted)}
+                        );
                     break;
 
                 default:
