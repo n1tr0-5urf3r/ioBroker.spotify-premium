@@ -258,7 +258,7 @@ function sendRequest(endpoint, method, sendBody, delayAccepted) {
 
     if (tooManyRequests){
         // We are currently blocked because of too many requests. Do not send out a new request.
-        return Promise.reject("Waiting because of too many requests...");
+        return Promise.reject(429);
     }
 
     return request(options)
@@ -1617,7 +1617,7 @@ function pollStatusApi(noReschedule) {
                 application.error202shown = false;
             }
             //if (err === 202 || err === 401 || err === 502) {
-            if (err === 202 || err === 401 || err === 500 || err === 502 || err === 503 || err === 504) {
+            if (err == 429 || err === 202 || err === 401 || err === 500 || err === 502 || err === 503 || err === 504) {
                 if (err === 202) {
                     if (!application.error202shown) {
                         adapter.log.debug(
