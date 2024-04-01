@@ -1617,7 +1617,7 @@ function pollStatusApi(noReschedule) {
                 application.error202shown = false;
             }
             //if (err === 202 || err === 401 || err === 502) {
-            if (err == 429 || err === 202 || err === 401 || err === 500 || err === 502 || err === 503 || err === 504) {
+            if (err === 429 || err === 202 || err === 401 || err === 500 || err === 502 || err === 503 || err === 504) {
                 if (err === 202) {
                     if (!application.error202shown) {
                         adapter.log.debug(
