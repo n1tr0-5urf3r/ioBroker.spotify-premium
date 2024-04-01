@@ -256,7 +256,7 @@ function sendRequest(endpoint, method, sendBody, delayAccepted) {
     const callStack = new Error().stack;
     adapter.setState('authorization.error', '', true);
 
-    adapter.log.info("TooManyRequests: " + tooManyRequests + "endpoint: " + endpoint + "sendBody " + sendBody);
+    adapter.log.info("TooManyRequests: " + tooManyRequests + " endpoint: " + endpoint);
 
 
     if (tooManyRequests){
@@ -1074,7 +1074,16 @@ async function getPlaylistTracks(owner, id) {
         };
         try {
             // TODO too many API calls here!
-            const data = await sendRequest(`/v1/users/${regParam}?${querystring.stringify(query)}`, 'GET', '');
+
+            ret = new Promise(resolve => setTimeout(() => resolve(), wait * 1000))
+                .then(() => {
+                    sendRequest(`/v1/users/${regParam}?${querystring.stringify(query)}`, 'GET', '')
+                })
+                .catch(error => {
+                    adapter.log.debug(error);
+            });
+
+            //const data = await sendRequest(`/v1/users/${regParam}?${querystring.stringify(query)}`, 'GET', '');
             adapter.log.info("In getPlaylistTracks");
             let i = offset;
             const no = i.toString();
@@ -1673,7 +1682,6 @@ function pollDeviceApi() {
 
 function schedulePlaylistPolling() {
     clearTimeout(application.playlistPollingHandle);
-    adapter.log.info("Playlist Delay: "+ application.playlistPollingDelaySeconds);
     if (application.playlistPollingDelaySeconds > 0) {
         application.playlistPollingHandle = setTimeout(() => !stopped && pollPlaylistApi(), application.playlistPollingDelaySeconds *
             1000);
@@ -1682,10 +1690,8 @@ function schedulePlaylistPolling() {
 
 function pollPlaylistApi() {
     clearTimeout(application.playlistInternalTimer);
-    if (application.playlistPollingDelaySeconds > 0) {
-        reloadUsersPlaylist();
-        schedulePlaylistPolling();
-    }
+    reloadUsersPlaylist();
+    schedulePlaylistPolling();
 }
 
 function startPlaylist(playlist, owner, trackNo, keepTrack) {
