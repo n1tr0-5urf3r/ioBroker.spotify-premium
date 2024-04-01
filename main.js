@@ -1069,7 +1069,7 @@ async function getPlaylistTracks(owner, id) {
     /* eslint-disable-next-line */
     while (true) {
         const query = {
-            limit: 500,
+            limit: 50,
             offset: offset
         };
         try {
@@ -1126,8 +1126,8 @@ async function getPlaylistTracks(owner, id) {
                 playlistObject.songs.push(a);
                 i++;
             });
-            if (offset + 500 < data.total) {
-                offset += 500;
+            if (offset + 50 < data.total) {
+                offset += 50;
             } else {
                 break;
             }
@@ -1682,9 +1682,10 @@ function schedulePlaylistPolling() {
 
 function pollPlaylistApi() {
     clearTimeout(application.playlistInternalTimer);
-    adapter.log.debug('call playlist polling');
-    reloadUsersPlaylist();
-    schedulePlaylistPolling();
+    if (application.playlistPollingDelaySeconds > 0) {
+        reloadUsersPlaylist();
+        schedulePlaylistPolling();
+    }
 }
 
 function startPlaylist(playlist, owner, trackNo, keepTrack) {
