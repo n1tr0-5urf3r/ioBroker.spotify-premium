@@ -100,6 +100,9 @@ Click for widget source.
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### 1.3.3 (2024-04-01)
+-   (N1tR0) A problem has been fixed which cause 'too many requests' errors [#241, #245, #311]
+
 ### 1.3.2 (2024-04-01)
 -   (N1tR0) A problem has been fixed that did not correctly update the progress of playing media [#339]
 
