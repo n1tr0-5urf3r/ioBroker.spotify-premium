@@ -258,7 +258,7 @@ function sendRequest(endpoint, method, sendBody, delayAccepted) {
 
     if (tooManyRequests){
         // We are currently blocked because of too many requests. Do not send out a new request.
-        return null;
+        return Promise.reject("Waiting because of too many requests...");
     }
 
     return request(options)
@@ -362,8 +362,10 @@ function sendRequest(endpoint, method, sendBody, delayAccepted) {
                     ret = new Promise(resolve => setTimeout(() => !stopped && resolve(), wait * 1000))
                         .then(() => {
                             tooManyRequests = false;
-                            sendRequest(endpoint, method, sendBody, delayAccepted)}
-                        );
+                            sendRequest(endpoint, method, sendBody, delayAccepted)})
+                        .catch(error => {
+                            adapter.log.info(error);
+                        });
                     break;
 
                 default:
@@ -656,7 +658,10 @@ function createPlaybackInfo(data) {
                                 artistImageUrlCache[artist] = url;
                                 urls.push(url);
                             }
-                        });
+                        })
+                        .catch(error => {
+                            adapter.log.info(error);
+                        });;
                 }
             };
 
@@ -772,7 +777,10 @@ function createPlaybackInfo(data) {
                         } else {
                             return sendRequest(`/v1/users/${userId}/playlists/${playlistId}?${querystring.stringify(query)}`,
                                 'GET', '')
-                                .then(refreshPlaylist);
+                                .then(refreshPlaylist)
+                                .catch(error => {
+                                    adapter.log.info(error);
+                                });
                         }
                     });
             } else {
@@ -2046,7 +2054,10 @@ function listenOnGetPlaybackInfo() {
 
 function listenOnGetDevices() {
     return sendRequest('/v1/me/player/devices', 'GET', '')
-        .then(data => reloadDevices(data));
+        .then(data => reloadDevices(data))
+        .catch(error => {
+            adapter.log.info(error);
+        });
 }
 
 function clearCache() {
