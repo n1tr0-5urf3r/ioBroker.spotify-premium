@@ -12,6 +12,8 @@ const ownUtils = require('./lib/utils');
 const querystring = require('querystring');
 const _request = require('request');
 
+const {lookup} = require('dns-lookup-cache');
+
 function request(options) {
     return new Promise((resolve, reject) =>
         _request(options, (error, status) => error ? reject(error) : resolve(status)));
@@ -244,6 +246,7 @@ function sendRequest(endpoint, method, sendBody, delayAccepted) {
     const options = {
         url: application.baseUrl + endpoint,
         method,
+        lookup: lookup, // DNS caching
         headers: {
             Authorization: 'Bearer ' + application.token
         },
