@@ -256,11 +256,11 @@ function sendRequest(endpoint, method, sendBody, delayAccepted) {
     const callStack = new Error().stack;
     adapter.setState('authorization.error', '', true);
 
-    adapter.log.info("TooManyRequests: " + tooManyRequests + " endpoint: " + endpoint);
 
 
     if (tooManyRequests){
         // We are currently blocked because of too many requests. Do not send out a new request.
+        adapter.log.info("TooManyRequests: " + tooManyRequests + " endpoint: " + endpoint);
         return Promise.reject(429);
     }
 
