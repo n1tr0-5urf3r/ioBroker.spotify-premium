@@ -2157,7 +2157,6 @@ function listenOnHtmlTracklist() {
                 let cssClassColDuration = '';
                 let cssClassSpace = '';
                 let cssClassLinebreak = '';
-                adapter.log.info('Current track: ' + current_trackID + ' this.id: ' + source[i].id);
                 if (current_trackID == source[i].id) {
                     styleTitle = ' style="color: #1db954; font-weight: bold"';
                     styleDuration = ' style="color: #1db954"';
