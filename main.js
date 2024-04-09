@@ -2128,13 +2128,15 @@ function listenOnHtmlTracklist() {
         current = obj.val;
     }
 
-    const x = adapter.subscribeStates('player.trackId');
-    let d = '';
-
-    Object.keys(x).forEach(function(key) {
-        d += key + ': ' + obj[key];
+    const x = adapter.getState('player.trackId', function (err, state) {
+        adapter.log.info(
+            'State ' + adapter.namespace + '.myState -' +
+            '  Value: '        + state.val +
+            ', ack: '          + state.ack +
+            ', time stamp: '   + state.ts  +
+            ', last changed: ' + state.lc
+        );
     });
-    adapter.log.info(d);
 
     obj = cache.getValue('player.playlist.trackListArray');
     if (obj === null || !obj.val) {
