@@ -256,11 +256,9 @@ function sendRequest(endpoint, method, sendBody, delayAccepted) {
     const callStack = new Error().stack;
     adapter.setState('authorization.error', '', true);
 
-
-
     if (tooManyRequests){
         // We are currently blocked because of too many requests. Do not send out a new request.
-        adapter.log.info("TooManyRequests: " + tooManyRequests + " endpoint: " + endpoint);
+        adapter.log.debug("TooManyRequests: " + tooManyRequests + " endpoint: " + endpoint);
         return Promise.reject(429);
     }
 
@@ -353,7 +351,6 @@ function sendRequest(endpoint, method, sendBody, delayAccepted) {
                     break;
 
                 case 429:
-                    adapter.log.info(JSON.stringify(response.headers));
                     // Too Many Requests
                     /* eslint-disable-next-line */ // TODO: Verify why eslint reports'Unexpected lexical declaration in case block'
                     let wait = 1;
@@ -1073,7 +1070,7 @@ async function getPlaylistTracks(owner, id) {
             offset: offset
         };
         try {
-            // TODO too many API calls here!
+            // Wait 1s between Playlist updates to avoid getting rate limitted
             await new Promise(resolve => setTimeout(resolve, 1000));
             const data = await sendRequest(`/v1/users/${regParam}?${querystring.stringify(query)}`, 'GET', '');
             let i = offset;
