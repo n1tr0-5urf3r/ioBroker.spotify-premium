@@ -2128,9 +2128,10 @@ function listenOnHtmlTracklist() {
         current = obj.val;
     }
 
+    const x = cache.getValue('player.trackId');
     let d = '';
 
-    Object.keys(obj).forEach(function(key) {
+    Object.keys(x).forEach(function(key) {
         d += key + ': ' + obj[key];
     });
     adapter.log.info(d);
@@ -2158,7 +2159,7 @@ function listenOnHtmlTracklist() {
             s += key + ': ' + obj[key] + ', ';
         });
     });
-    //adapter.log.info('source ' + s);
+    adapter.log.info('source ' + s);
 
     for (let i = 0; i < source.length; i++) {
         let styleTitle = '';
