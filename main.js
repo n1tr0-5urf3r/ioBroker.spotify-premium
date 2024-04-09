@@ -258,7 +258,7 @@ function sendRequest(endpoint, method, sendBody, delayAccepted) {
 
     if (tooManyRequests){
         // We are currently blocked because of too many requests. Do not send out a new request.
-        adapter.log.debug("TooManyRequests: " + tooManyRequests + " endpoint: " + endpoint);
+        adapter.log.debug('TooManyRequests: ' + tooManyRequests + ' endpoint: ' + endpoint);
         return Promise.reject(429);
     }
 
@@ -363,7 +363,8 @@ function sendRequest(endpoint, method, sendBody, delayAccepted) {
                     ret = new Promise(resolve => setTimeout(() => !stopped && resolve(), wait * 1000))
                         .then(() => {
                             tooManyRequests = false;
-                            sendRequest(endpoint, method, sendBody, delayAccepted)})
+                            sendRequest(endpoint, method, sendBody, delayAccepted);
+                        })
                         .catch(error => {
                             adapter.log.debug(error);
                         });
@@ -662,7 +663,7 @@ function createPlaybackInfo(data) {
                         })
                         .catch(error => {
                             adapter.log.debug(error);
-                        });;
+                        });
                 }
             };
 
@@ -1629,7 +1630,7 @@ function pollStatusApi(noReschedule) {
                     }
                     application.error202shown = true;
                 } else if (err === 429){
-                    adapter.log.debug("We are currently being rate limited, waiting for next update ...")
+                    adapter.log.debug('We are currently being rate limited, waiting for next update ...');
                 } else {
                     adapter.log.warn('unexpected api response http ' + err + '; continue polling');
                 }
@@ -2143,7 +2144,14 @@ function listenOnHtmlTracklist() {
     let html = '<table class="spotifyTracksTable">';
 
     adapter.log.info('Current ' + current);
-    adapter.log.info('source ' + source);
+    let s = '';
+
+    source.forEach(function(obj) {
+        Object.keys(obj).forEach(function(key){
+            s += key + ': ' + obj[key] + ', ';
+        });
+    });
+    adapter.log.info('source ' + s);
 
     for (let i = 0; i < source.length; i++) {
         let styleTitle = '';
@@ -2159,7 +2167,7 @@ function listenOnHtmlTracklist() {
         let cssClassColDuration = '';
         let cssClassSpace = '';
         let cssClassLinebreak = '';
-        if (current === i) {
+        if (current == i) {
             styleTitle = ' style="color: #1db954; font-weight: bold"';
             styleDuration = ' style="color: #1db954"';
             cssClassRow = ' spotifyTracksRowActive';
@@ -2177,7 +2185,7 @@ function listenOnHtmlTracklist() {
 
         html += `<tr class="spotifyTracksRow${cssClassRow}" onclick="vis.setValue('${adapter.namespace}.player.playlist.trackList', ${i})">`;
         html += `<td class="spotifyTracksColIcon${cssClassIcon}">`;
-        if (current === i) {
+        if (current == i) {
             html += '<img style="width: 16px; height: 16px" class="spotifyTracksIconActive" src="widgets/spotify-premium/img/active_song_speaker_green.png" />';
         } else {
             html += '<img style="width: 16px; height: 16px" class="spotifyTracksIconInactive" src="widgets/spotify-premium/img/inactive_song_note_white.png" />';
