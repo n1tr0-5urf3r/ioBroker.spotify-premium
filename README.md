@@ -103,6 +103,7 @@ Click for widget source.
 ### 1.4.1 (2024-04-09)
 -   (N1tR0) A problem has been fixed which cause 'too many requests' errors [#241, #245, #311]. The recommended update interval for playlist information is now 60 minutes.
 -   (N1tR0) A DNS cache has been added [#341].
+-   (N1tR0) Potentially fix 'Current played track is not highlighted' [#283]
 
 ### 1.3.2 (2024-04-01)
 -   (N1tR0) A problem has been fixed that did not correctly update the progress of playing media [#339]
