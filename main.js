@@ -2142,6 +2142,9 @@ function listenOnHtmlTracklist() {
     const source = obj.val;
     let html = '<table class="spotifyTracksTable">';
 
+    adapter.log.info('Current ' + current);
+    adapter.log.info('source ' + source);
+
     for (let i = 0; i < source.length; i++) {
         let styleTitle = '';
         let styleDuration = '';
@@ -2156,7 +2159,7 @@ function listenOnHtmlTracklist() {
         let cssClassColDuration = '';
         let cssClassSpace = '';
         let cssClassLinebreak = '';
-        if (current == i) {
+        if (current === i) {
             styleTitle = ' style="color: #1db954; font-weight: bold"';
             styleDuration = ' style="color: #1db954"';
             cssClassRow = ' spotifyTracksRowActive';
@@ -2174,7 +2177,7 @@ function listenOnHtmlTracklist() {
 
         html += `<tr class="spotifyTracksRow${cssClassRow}" onclick="vis.setValue('${adapter.namespace}.player.playlist.trackList', ${i})">`;
         html += `<td class="spotifyTracksColIcon${cssClassIcon}">`;
-        if (current == i) {
+        if (current === i) {
             html += '<img style="width: 16px; height: 16px" class="spotifyTracksIconActive" src="widgets/spotify-premium/img/active_song_speaker_green.png" />';
         } else {
             html += '<img style="width: 16px; height: 16px" class="spotifyTracksIconInactive" src="widgets/spotify-premium/img/inactive_song_note_white.png" />';
