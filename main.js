@@ -2128,7 +2128,7 @@ function listenOnHtmlTracklist() {
         current = obj.val;
     }
 
-    const x = cache.getValue('player.trackId');
+    const x = adapter.subscribeStates('player.trackId');
     let d = '';
 
     Object.keys(x).forEach(function(key) {
@@ -2151,7 +2151,6 @@ function listenOnHtmlTracklist() {
     const source = obj.val;
     let html = '<table class="spotifyTracksTable">';
 
-    adapter.log.info('Current ' + current);
     let s = '';
 
     source.forEach(function(obj) {
