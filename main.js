@@ -2128,6 +2128,14 @@ function listenOnHtmlTracklist() {
         current = obj.val;
     }
 
+    adapter.log.info(obj.val);
+    obj.forEach(function(obj) {
+        Object.keys(obj).forEach(function(key){
+            s += key + ': ' + obj[key] + ', ';
+        });
+    });
+    adapter.log.info('source ' + s);
+
     obj = cache.getValue('player.playlist.trackListArray');
     if (obj === null || !obj.val) {
         return cache.setValue('html.tracks', '');
@@ -2151,7 +2159,7 @@ function listenOnHtmlTracklist() {
             s += key + ': ' + obj[key] + ', ';
         });
     });
-    adapter.log.info('source ' + s);
+    //adapter.log.info('source ' + s);
 
     for (let i = 0; i < source.length; i++) {
         let styleTitle = '';
