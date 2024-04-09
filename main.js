@@ -2120,25 +2120,20 @@ function listenOnHtmlPlaylists() {
 }
 
 function listenOnHtmlTracklist() {
-    let obj = cache.getValue('player.playlist.trackList');
-    let current;
-    if (obj === null || !obj.val) {
-        current = '';
-    } else {
-        current = obj.val;
-    }
+    const current_trackID = adapter.getState('player.trackId', function (err, state) {
 
-    const x = adapter.getState('player.trackId', function (err, state) {
-        adapter.log.info(
-            'State ' + adapter.namespace + '.myState -' +
-            '  Value: '        + state.val +
-            ', ack: '          + state.ack +
-            ', time stamp: '   + state.ts  +
-            ', last changed: ' + state.lc
-        );
+        if (err) {
+            adapter.log.error(err);
+            return '';
+        }
+        else if (state === null || !state.val) {
+            return '';
+        } else {
+            return state.val;
+        }
     });
 
-    obj = cache.getValue('player.playlist.trackListArray');
+    const obj = cache.getValue('player.playlist.trackListArray');
     if (obj === null || !obj.val) {
         return cache.setValue('html.tracks', '');
     }
@@ -2152,15 +2147,6 @@ function listenOnHtmlTracklist() {
 
     const source = obj.val;
     let html = '<table class="spotifyTracksTable">';
-
-    let s = '';
-
-    source.forEach(function(obj) {
-        Object.keys(obj).forEach(function(key){
-            s += key + ': ' + obj[key] + ', ';
-        });
-    });
-    adapter.log.info('source ' + s);
 
     for (let i = 0; i < source.length; i++) {
         let styleTitle = '';
@@ -2176,7 +2162,7 @@ function listenOnHtmlTracklist() {
         let cssClassColDuration = '';
         let cssClassSpace = '';
         let cssClassLinebreak = '';
-        if (current == i) {
+        if (current_trackID == source[i].id) {
             styleTitle = ' style="color: #1db954; font-weight: bold"';
             styleDuration = ' style="color: #1db954"';
             cssClassRow = ' spotifyTracksRowActive';
@@ -2194,7 +2180,7 @@ function listenOnHtmlTracklist() {
 
         html += `<tr class="spotifyTracksRow${cssClassRow}" onclick="vis.setValue('${adapter.namespace}.player.playlist.trackList', ${i})">`;
         html += `<td class="spotifyTracksColIcon${cssClassIcon}">`;
-        if (current == i) {
+        if (current_trackID == source[i].id) {
             html += '<img style="width: 16px; height: 16px" class="spotifyTracksIconActive" src="widgets/spotify-premium/img/active_song_speaker_green.png" />';
         } else {
             html += '<img style="width: 16px; height: 16px" class="spotifyTracksIconInactive" src="widgets/spotify-premium/img/inactive_song_note_white.png" />';
