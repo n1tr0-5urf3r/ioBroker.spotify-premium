@@ -2128,8 +2128,12 @@ function listenOnHtmlTracklist() {
         current = obj.val;
     }
 
-    adapter.log.info(obj);
-    adapter.log.info(obj.val);
+    let d = '';
+
+    Object.keys(obj).forEach(function(key) {
+        d += key + ': ' + obj[key];
+    });
+    adapter.log.info(d);
 
     obj = cache.getValue('player.playlist.trackListArray');
     if (obj === null || !obj.val) {
