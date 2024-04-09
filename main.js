@@ -2128,13 +2128,15 @@ function listenOnHtmlTracklist() {
         current = obj.val;
     }
 
+    adapter.log.info(obj);
     adapter.log.info(obj.val);
+    let d = '';
     obj.forEach(function(obj) {
         Object.keys(obj).forEach(function(key){
-            s += key + ': ' + obj[key] + ', ';
+            d += key + ': ' + obj[key] + ', ';
         });
     });
-    adapter.log.info('source ' + s);
+    adapter.log.info('source ' + d);
 
     obj = cache.getValue('player.playlist.trackListArray');
     if (obj === null || !obj.val) {
